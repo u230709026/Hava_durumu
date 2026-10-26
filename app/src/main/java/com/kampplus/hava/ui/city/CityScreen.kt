@@ -15,9 +15,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -85,19 +89,47 @@ fun CityScreen(
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.app_name)) }) }
+        topBar = { TopAppBar(title = { Text("🌤️ Hava Durumu") }) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
+            // 🟢 KARŞILAMA KARTI:
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFFF3E5F5), // Yumuşak Lavanta Moru Arka Plan
+                    contentColor = Color(0xFF6A1B9A)    // Şık Koyu Mor Yazı Rengi
+                )
+            ) {
+                Text(
+                    text = "👋 Selam! Bugün hangi şehrin havasına bakmak istersin?",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
             SearchBar(
                 query = query,
                 onQueryChange = onQueryChange,
                 onSearch = onSearch,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+
+
+
+
             )
+            if (uiState is LoadState.Success) {
+                Text(
+                    text = "${uiState.data.size} şehir bulundu",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                )
+            }
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 // Dört durumun tamamı burada karşılanır. `sealed` olduğu için
                 // bir dalı unutursak Kotlin derleme hatası verir.
